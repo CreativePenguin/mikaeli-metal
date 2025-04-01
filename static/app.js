@@ -6,10 +6,14 @@ const mockData = [
     {id: 'B1', name: 'Chocolate bar', rrp: '22.4', info: 'Deliciously overpriced chocolate'},
 ];
 
-const populateProducts = async (category) => {
+const populateProducts = async (category, method='GET', payload) => {
     const products = document.querySelector('#products');
     products.innerHTML = '';
-    const res = await fetch(`${API}/${category}`);
+    const send = method === 'GET' ? {} : {
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify(payload)
+    };
+    const res = await fetch(`${API}/${category}`, {method, ...send});
     const data = await res.json();
 
     for (const product of data) {
@@ -25,12 +29,26 @@ const populateProducts = async (category) => {
 }
 
 const category = document.querySelector('#category');
+const addForm = document.querySelector('#add');
 
 category.addEventListener('input', async ({ target }) => {
+    addForm.style.display = 'block';
     await populateProducts(target.value);
 });
 
+addForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const { target } = e;
+    const payload = {
+        name: target.name.value,
+        rrp: target.rrp.value,
+        info: target.info.value
+    };
+    await populateProducts(category.value, 'POST', payload);
+    target.reset();
+})
 
+// Custom Element
 customElements.define('product-item', class Item extends HTMLElement {
     constructor() {
         super();
