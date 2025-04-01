@@ -75,19 +75,29 @@ Data is then sent with `res.end(data)`
 A. Deploys files to a remote server  
 B. Creates a local server that supplies mock data  
 C. Creates a local server that hosts static files
->! C. Creates a local server that hosts static files
+<details>
+  <summary>Click for answer</summary>
+  C. Creates a local server that hosts static files
+</details>
 
 3.2: What is a mock service?  
 A. A service that doesn't really exist  
 B. A service that generates trash talk  
 C. A service that is built in place of a service that isn't (easily)
 accessible in development environments and/or a way to prototype a future service  
->! C. A service that is built in place of a service that isn't (easily)
-accessible in development environments and/or a way to prototype a future service  
+<details>
+  <summary>Click for answer</summary>
+  C. A service that is built in place of a service that isn't (easily)
+accessible in development environments and/or a way to prototype a future service 
+</details>
+ 
 
 3.3: What two characteristics should a production service have that
 a mock service does not necessarily need to conform to?  
 A. Statelessness and input validation  
 B. Read and write functionality  
 C. Logging and debugging  
->! A. Statelessness and input validation  
+<details>
+  <summary>Click for answer</summary>
+  A. Statelessness and input validation  
+</details>
