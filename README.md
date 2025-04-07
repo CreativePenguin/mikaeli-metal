@@ -5,16 +5,22 @@ run with `npx serve -p 5050 static`, and run `npm run start` in mock-srv/ folder
 This serves files static folder, and sets up backend in mock-srv that requests can be made from  
 
 ## Project Description
+The project represents a mock shop, where the user is able to check prices of items,
+submit new items, and track the amount of purchases of items.
 The root project is the frontend which requests to `/mock-srv` to get data  
 `/mock-srv` is a folder that contains a node server built with fastify
 with routes `/confectionery` and `/electronics`  
-Data: list of objects in format `{id: str, name: str, rrp: str, info: str}`
+Data: list of objects in format `{id: str, name: str, rrp: str, info: str}`  
 
 ## Branch Descriptions
 
 Each branch is a different unit of the tutorial  
 Units:  
-[3.0 Webservice](#30-webservice), [3.1 GET](#31-get), [3.2 POST](#32-post)
+[3.0 Webservice](#30-webservice), [3.1 GET](#31-get), [3.2 POST](#32-post)  
+[4.1 WebSockets](#41-websockets)
+
+### 4.1 Websockets
+Adds websockets in the form of a stream of data which the website keeps track of
 
 ### 3.2 POST
 

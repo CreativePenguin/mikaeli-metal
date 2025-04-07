@@ -10,5 +10,6 @@ export default async function (fastify, opts) {
         // opts.prefix contains route prefix (in this case "/confectionery")
         // The second argument determines the category, so the category is now set to confectionery
         fastify.mockDataInsert(request, opts.prefix.slice(1), data);
+        return data;
     })
 };

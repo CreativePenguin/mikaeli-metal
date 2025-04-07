@@ -8,6 +8,7 @@
   "main": "index.js",
   "scripts": {
     "static": "serve -p 5050 static",
+    "start": "serve -p 5050 static && npm run --prefix mock-srv start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
