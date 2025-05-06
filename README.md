@@ -18,7 +18,12 @@ Data: list of objects in format `{id: str, name: str, rrp: str, info: str}`
 Each branch is a different unit of the tutorial  
 Units:  
 [3.0 Webservice](#30-webservice), [3.1 GET](#31-get), [3.2 POST](#32-post)  
-[4.0 WebSockets](#40-websockets), [4.1 Bicommunication](#41-bidirectional-communication)
+[4.0 WebSockets](#40-websockets), [4.1 Bicommunication](#41-bidirectional-communication),
+[4.2 Server State](#42-server-state)
+
+### 4.2 Server State
+Instead of simulating a stream of orders with a random number generator,
+the server instead receives order updates from the frontend with a websocket
 
 ### 4.1 Bidirectional Communication
 Previous websocket functionality required closing and reopening websockets
@@ -33,7 +38,9 @@ Frontend no longer re-opens a socket with new path when category switches,
 but instead sends a message to the backend to update the category
 
 #### mock-srv/routes/orders/index.mjs
-Listener added to respond to a socket message from the frontend
+Listener added to respond to a socket message from the frontend  
+New function created `monitorMessages` which adds a listener for
+websocket messages from the frontend
 
 ### 4.0 Websockets
 Adds websockets in the form of a stream of data which the website keeps track of  
