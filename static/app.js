@@ -3,6 +3,7 @@ const WS_API = 'ws://localhost:3000';
 
 /**
  * This function makes a request to mock-srv and populates website with the data it receives
+ * Post request is used for when a new product is submitted to be added to data
  * @param {string} category The request path -- determined from website dropdown
  * @param {*} method GET or POST (default is GET)
  * @param {*} payload additional information to send with request (eg. form info)

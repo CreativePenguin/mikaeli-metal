@@ -3,6 +3,7 @@
 Linux Foundation basic node tutorial repo
 run with `npx serve -p 5050 static`, and run `npm run start` in mock-srv/ folder  
 This serves files static folder, and sets up backend in mock-srv that requests can be made from  
+Project generated with `npx fastify generate . --esm`  
 
 ## Project Description
 The project represents a mock shop, where the user is able to check prices of items,
@@ -17,10 +18,35 @@ Data: list of objects in format `{id: str, name: str, rrp: str, info: str}`
 Each branch is a different unit of the tutorial  
 Units:  
 [3.0 Webservice](#30-webservice), [3.1 GET](#31-get), [3.2 POST](#32-post)  
-[4.1 WebSockets](#41-websockets)
+[4.0 WebSockets](#40-websockets)
 
-### 4.1 Websockets
-Adds websockets in the form of a stream of data which the website keeps track of
+### 4.0 Websockets
+Adds websockets in the form of a stream of data which the website keeps track of  
+Connection located at `ws://localhost:3000/orders/${category}`
+
+#### static/index.html
+Add additional element to each product that tracks number of orders
+
+#### static/app.js
+Creates a new websocket instance with `new Websocket()`  
+Websocket has a listener attached that updates orders numbers on the webpage
+with the new values from the websocket  
+Socket is closed and reopened upon inputs to the web page
+
+#### mock-srv/app.js
+`fastify.register(websocket)` added to register
+<a src="https://github.com/fastify/fastify-websocket">fastify-websocket</a>  
+See link to know how to use websockets with fastify
+
+#### mock-srv/plugins/data-utils.js
+`realtimeOrdersSimulator()` is an async generator, that when called
+continuously returns a JSON string with an incremented order number  
+JSON String format: `{id, total, type: realtimeOrders}` --
+the frontend interprets this string to update the order count
+`currentOrders()` is a generator function that returns
+the current order numbers. This gets called immediately
+when the websocket opens -- this prevents the frontend from
+showing undefined as the order number
 
 ### 3.2 POST
 
@@ -49,7 +75,7 @@ generated with fastify npm package with `$ npx fastify generate . --esm`
 Fastify server is now run with `$ npm start` in the `/mock-srv/` dir
 #### mock-srv/app.js
 use `fastify.register(cors)` to automatically add automatically add "Access-Control-Allow-Origin" to all requests
-#### mock-srv/routes/confectionary & mock-srv/routes/electronics
+#### mock-srv/routes/confectionery & mock-srv/routes/electronics
 Define the two categories that can be called with `fetch(${API}/${category})`  
 Each route has its own `index.mjs` file that uses `fastify.get()` to send its own mock data  
 

@@ -7,7 +7,7 @@ const timeout = promisify(setTimeout);
 
 const catToPrefix = {
     electronics: 'A',
-    confectionary: 'B'
+    confectionery: 'B'
 };
 
 // Mock data stream to simulate incoming orders
@@ -33,7 +33,7 @@ async function* realtimeOrdersSimulator() {
         const id = ids[Math.floor(Math.random() * ids.length)];  // Get random id
         orders[id].total += delta;
         const { total } = orders[id];
-        yield JSON.stringify({ id, total });  // { id: <value>, total: <value> }
+        yield JSON.stringify({ id, total, type: 'realtimeOrders' });  // { id: <value>, total: <value> }
         await timeout(1500);
     }
 }
@@ -46,10 +46,10 @@ async function* realtimeOrdersSimulator() {
  * @yields {string} new stringified object { id: value, total: value }
  */
 function* currentOrders(category) {
-    const prefix = catToPrefix(category);
+    const prefix = catToPrefix[category];
     const orderIds = Object.keys(orders).filter((id) => id[0] === prefix);
     for (const id of orderIds) {
-        yield JSON.stringify({ id, ...orders[id] })
+        yield JSON.stringify({ id, ...orders[id], type: 'currentOrders' })
     }
 }
 
