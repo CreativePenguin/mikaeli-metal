@@ -27,8 +27,8 @@ const orders = {
  * @yields {string} new stringified object { id: <value>, total: <value> }
  */
 async function* realtimeOrdersSimulator() {
-    const ids = Object.keys(orders)
     while (true) {
+        const ids = Object.keys(orders)
         const delta = Math.floor(Math.random() * 7) + 1;
         const id = ids[Math.floor(Math.random() * ids.length)];  // Get random id
         orders[id].total += delta;
@@ -79,6 +79,7 @@ export default fp(async function (fastify, opts) {
         const id = calculateID(idToPrefix, data);
         data.push({ id, ...request.body });
         orders[id] = { total: 0 };
+        console.log(`Added ${id} to ${Object.keys(orders)}`);
         return data;
     });
 });

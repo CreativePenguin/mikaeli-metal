@@ -18,7 +18,22 @@ Data: list of objects in format `{id: str, name: str, rrp: str, info: str}`
 Each branch is a different unit of the tutorial  
 Units:  
 [3.0 Webservice](#30-webservice), [3.1 GET](#31-get), [3.2 POST](#32-post)  
-[4.0 WebSockets](#40-websockets)
+[4.0 WebSockets](#40-websockets), [4.1 Bicommunication](#41-bidirectional-communication)
+
+### 4.1 Bidirectional Communication
+Previous websocket functionality required closing and reopening websockets
+whenever the web category was changed.
+By implementing bidirectional communication the frontend would send updates
+through the websocket connection,
+and allow the server's websockets to update without needing to open a new
+websocket
+
+#### static/app.js
+Frontend no longer re-opens a socket with new path when category switches,
+but instead sends a message to the backend to update the category
+
+#### mock-srv/routes/orders/index.mjs
+Listener added to respond to a socket message from the frontend
 
 ### 4.0 Websockets
 Adds websockets in the form of a stream of data which the website keeps track of  
@@ -47,6 +62,16 @@ the frontend interprets this string to update the order count
 the current order numbers. This gets called immediately
 when the websocket opens -- this prevents the frontend from
 showing undefined as the order number
+
+#### mock-srv/routes/orders/index.mjs
+This function uses the `websocket` plugin to
+manage the server response whenever there's calls to
+`ws://localhost:3000/orders/${category}`,  
+Uses functions `realTimeOrdersSimulator()` and `currentOrders()` --
+uses `for await` loop to continuously call `realTimeOrdersSimulator`
+to simulate a stream of new orders,
+and passes in the `/:category` that the websocket was called with
+to send the current sale values with `currentOrders()`
 
 ### 3.2 POST
 

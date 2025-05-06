@@ -53,8 +53,15 @@ let socket = null;
  * @param {string} category string that represents path (from dropdown)
  */
 const realTimeOrders = (category) => {
-    if (socket) socket.close();
-    socket = new WebSocket(`${WS_API}/orders/${category}`);
+    if (socket == null) {
+        socket = new WebSocket(`${WS_API}/orders/${category}`);
+    } else {
+        // update new category
+        socket.send(
+            JSON.stringify({ cmd: 'update-category', payload: { category } })
+        );
+    }
+    // Listen for messages from the server
     socket.addEventListener('message', ({ data }) => {
         try {
             const { id, total } = JSON.parse(data);
@@ -102,4 +109,3 @@ customElements.define('product-item', class Item extends HTMLElement {
         this.attachShadow({mode: 'open'}).appendChild(itemTmpl.cloneNode(true));
     }
 });
-
