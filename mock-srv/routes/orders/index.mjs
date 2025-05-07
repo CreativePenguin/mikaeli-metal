@@ -41,4 +41,13 @@ export default async function (fastify, opts) {
 
         }
     );
+
+    fastify.post(
+        '/:id',
+        async (request, reply) => {
+            const { id } = request.params;
+            fastify.addOrder(id, request.body.amount);
+            return { ok: true };
+        }
+    )
 }

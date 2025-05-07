@@ -23,7 +23,9 @@ Units:
 
 ### 4.2 Server State
 Instead of simulating a stream of orders with a random number generator,
-the server instead receives order updates from the frontend with a websocket
+the server instead receives order updates from the frontend with a websocket  
+Orders are simulated with a POST request -- can be simulated from terminal with:
+`$ node -e "http.request('http://localhost:3000/orders/A1', { method: 'POST', headers: {'content-type': 'application/json'}}, (res) => res.pipe(process.stdout)).end(JSON.stringify({amount: 10}))"`
 
 ### 4.1 Bidirectional Communication
 Previous websocket functionality required closing and reopening websockets

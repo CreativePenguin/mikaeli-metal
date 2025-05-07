@@ -1,9 +1,7 @@
 "use strict";
 
 import fp from 'fastify-plugin';
-import {promisify} from 'node:util';
-
-const timeout = promisify(setTimeout);
+import { PassThrough } from 'node:stream';
 
 const catToPrefix = {
     electronics: 'A',
@@ -18,23 +16,22 @@ const orders = {
     B1: { total: 101 },
 }
 
+/**
+ * Creates a stream of orders
+ */
+const orderStream = new PassThrough({ objectMode: true });
+
 // Asterisk is non-functional syntax that denotes a function is a generator
 // async generator function that can be iterated over to produce random orders
 // Called with `for await (let j of realTimeOrdersSimulator())` to get values
 // Using the normal `for (let j of realTimeOrdersSimulator())` gets promises
 /**
- * Generates a new random order when called
+ * Generates a new order from stream
  * @yields {string} new stringified object { id: <value>, total: <value> }
  */
 async function* realtimeOrdersSimulator() {
-    while (true) {
-        const ids = Object.keys(orders)
-        const delta = Math.floor(Math.random() * 7) + 1;
-        const id = ids[Math.floor(Math.random() * ids.length)];  // Get random id
-        orders[id].total += delta;
-        const { total } = orders[id];
-        yield JSON.stringify({ id, total, type: 'realtimeOrders' });  // { id: <value>, total: <value> }
-        await timeout(1500);
+    for await (const {id, total} of orderStream) {
+        return JSON.stringify({ id, total });
     }
 }
 
@@ -53,6 +50,28 @@ function* currentOrders(category) {
     }
 }
 
+function addOrder(id, amount) {
+    // check if id exists
+    if (!orders[id]) {
+        const err = new Error(`Order id not found: ${id}`);
+        err.statusCode = 404;  // Creates Error 404
+        throw err;
+    }
+
+    // check the amount is an integer
+    if (Number.isSafeInteger(amount) === false) {
+        const err = new Error(`Amount is not a number: ${amount}`);
+        err.statusCode = 400;  // Creates Error 400 -- bad request
+        throw err;
+    }
+
+    // append amount to orders variable
+    orders[id].total += amount;
+    const new_order = { id, total: orders[id].total };
+    console.log("Adding order: %o", new_order);
+    orderStream.write(new_order);
+}
+
 /**
  * Finds the next id by filtering out duplicate ids, and adding the id prefix
  * @param {*} idPrefix prefix to put in front of id's
@@ -66,8 +85,10 @@ const calculateID = (idPrefix, data) => {
 }
 
 export default fp(async function (fastify, opts) {
+    debugger
     fastify.decorate('currentOrders', currentOrders);
     fastify.decorate('realtimeOrders', realtimeOrdersSimulator);
+    fastify.decorate('addOrder', addOrder);
 
     /**
      * fastify.mockDataInsert() adds data from the request into the data array which is returned
