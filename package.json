@@ -9,7 +9,8 @@
   "scripts": {
     "static": "serve -p 5050 static",
     "start": "serve -p 5050 static && npm run --prefix mock-srv start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cli": "my-cli"
   },
   "dependencies": {
     "fastify": "^5.2.1",
