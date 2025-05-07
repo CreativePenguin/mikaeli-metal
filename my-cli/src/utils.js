@@ -52,3 +52,7 @@ export async function add(...args) {
     process.exit(1);
   })
 }
+
+export function listCategories() {
+
+}

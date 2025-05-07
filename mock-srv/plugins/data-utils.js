@@ -31,7 +31,7 @@ const orderStream = new PassThrough({ objectMode: true });
  */
 async function* realtimeOrdersSimulator() {
     for await (const {id, total} of orderStream) {
-        return JSON.stringify({ id, total });
+        yield JSON.stringify({ id, total });
     }
 }
 

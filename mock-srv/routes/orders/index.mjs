@@ -36,6 +36,7 @@ export default async function (fastify, opts) {
             sendCurrentOrders(category, socket);
             // Send current orders through socket
             for await (const order of fastify.realtimeOrders()) {
+                console.log('order added to stream', order)
                 socket.send(order);
             }
 
