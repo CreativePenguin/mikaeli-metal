@@ -19,7 +19,12 @@ Each branch is a different unit of the tutorial
 Units:  
 [3.0 Webservice](#30-webservice), [3.1 GET](#31-get), [3.2 POST](#32-post)  
 [4.0 WebSockets](#40-websockets), [4.1 Bicommunication](#41-bidirectional-communication),
-[4.2 Server State](#42-server-state)
+[4.2 Server State](#42-server-state)  
+[5.0](#50)
+
+### 5.0 Command Line Tools
+Now the user is able to simulate orders with command line command:
+`npm run cli <ID> <AMOUNT>`
 
 ### 4.2 Server State
 Instead of simulating a stream of orders with a random number generator,

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "bin": "./bin/cmd.js",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "commander": "^13.1.0",
     "got": "^14.4.7"
   }
 }

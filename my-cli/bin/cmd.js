@@ -1,46 +1,46 @@
 #!/usr/bin/env node
+import {Command} from 'commander';
+import {update, add} from '../src/utils.js';
 
-const API = 'http://localhost:3000';
+const program = new Command();
 
-const usage = (msg = 'Back office for My App') => {
-  console.log(`\n${msg}\n`);
-  console.log('Usage: cmd <ID> <AMOUNT>');
-};
+// Create a new program
+program
+  .version('0.0.1')
+  .description('Back office for My App')
+  .name('my-cli')
 
-const argv = process.argv.slice(2);
-// If there are no arguments, show the usage and exit
-if (argv.length < 2) {
-  usage();
-  process.exit(1);
-}
 
-// Deconstruct the arguments into variables
-const [argId, argAmount] = argv;
+// Create a program for updating orders
+program
+  // set the command name
+  .command('update')
+  .description('Update Order by ID')
+  .argument('<ID>', 'Order ID')
+  .argument('<AMOUNT>', 'Order Amount')
+  // Set the action to be executed when the command is run
+  .action(
+    async (id, amount) => await update(id, amount)
+  );
 
-// Check if the Amount is a number
-const amount = parseInt(argAmount);
-// If the amount is not a number, show the usage and exit
-if (isNaN(amount)) {
-  usage('Error: <AMOUNT> must be a number');
-  process.exit(1);
-}
+// Create a program for listing categories by id's
+// $ my-cli add electronics A3 Laptop 599 "Cool midpriced laptop"
+program
+  // set the command name
+  .command('add')
+  .description('Add Product by ID to a Category')
+  .argument('<CATEGORY>', 'Product Category')
+  .argument('<ID>', 'Product ID')
+  .argument('<NAME>', 'Product Name')
+  .argument('<AMOUNT>', 'Product RRP')
+  // Info is set to be optional
+  .argument('[INFO...]', 'Product Info')
+  // Set the action to be executed when the command is run
+  .action(
+    async (category, id, name, amount, info) =>
+      await add(category, id, name, amount, info)
+  );
 
-fetch(`${API}/orders/${argId}`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ amount }),
-})
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
-    }
-    return response.json();
-  })
-  .then((data) => {
-    console.log(`Order ${argId} updated with amount ${amount}`);
-  })
-  .catch((err) => {
-    // If there is an error, log it to the console and exit
-    console.log(err.message);
-    process.exit(1);
-  });
+
+// Parse the command line arguments
+program.parse()
