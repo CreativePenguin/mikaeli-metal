@@ -25,6 +25,8 @@ Units:
 ### 5.0 Command Line Tools
 Now the user is able to simulate orders with command line command:
 `npm run cli <ID> <AMOUNT>`
+or, can run `my-cli <ARGS> <FLAGS>`  
+Note that my-cli will change folders unless there are  arguments added
 
 ### 4.2 Server State
 Instead of simulating a stream of orders with a random number generator,

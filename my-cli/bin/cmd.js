@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import {Command} from 'commander';
-import {update, add} from '../src/utils.js';
+import {update, add, listCategories, 
+  listCategoryItems } from '../src/utils.js';
 
 const program = new Command();
 
@@ -39,6 +40,26 @@ program
   .action(
     async (category, id, name, amount, info) =>
       await add(category, id, name, amount, info)
+  );
+
+program
+  .command('list')
+  .description('List categories, or its items')
+  .argument('[CATEGORY]', 'Product Category')
+  .option('-a, --all', 'List all categories')
+  .action(
+    async (args, opts) => {
+      if (args && opts.all) {
+        throw new Error('Cannot specify both "all" and category');
+      } else if (opts.all || args === 'all') {
+        listCategories();
+      } else if (args === 'confectionery' || args === 'electronics') {
+        await listCategoryItems(args);
+      } else {
+        throw new Error('Invalid category specified');
+        // console.log('Invalid category specified');
+      }
+    }
   );
 
 

@@ -53,6 +53,33 @@ export async function add(...args) {
   })
 }
 
+const categories = ['confectionery', 'electronics']
 export function listCategories() {
+  log('Categories:\n')
+  try {
+    for (const cat of categories) log(cat);
+  } catch (err) {
+    error(err.message);
+    process.exit(1);
+  }
+}
 
+export async function listCategoryItems(category) {
+  log(`Listing IDs for category ${category}`);
+  try {
+    fetch(`${API}/${category}`)
+      .then( (data) => data.json())
+      .then( (items) => {
+        for (const {id, name, rrp, info} of items) {
+          log(`id ${id}: ${name} - $${rrp}\nProduct Info:\t${info}`);
+        }
+      });
+    // for await (let item of fetch(`${API}/${category}`)) {
+    //   const { id, name, rrp, info } = item;
+    //   log(`id ${id}: ${name} - $${rrp}\nProduct Info:\t${info}`);
+    // }
+  } catch(err) {
+    console.log(err.message);
+    process.exit(1);
+  }
 }
