@@ -41,7 +41,8 @@ export async function add(...args) {
   await fetch(`${API}/${category}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, name, rrp: +amount, info: info.join(' ') }),
+    body: JSON.stringify({ id, name, rrp: +amount, info }),
+    // body: JSON.stringify({ id, name, rrp: +amount, info: info.join(' ') }),
   }).then((response) => {
     if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -55,7 +56,7 @@ export async function add(...args) {
   })
 }
 
-export const categories = ['confectionery', 'electronics']
+export const categories = ['confectionery', 'electronics'];
 export function listCategories() {
   log('Categories:\n')
   try {

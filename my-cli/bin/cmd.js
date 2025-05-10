@@ -2,10 +2,13 @@
 import {Command} from 'commander';
 import {update, add, listCategories, log, error,
   listCategoryItems, displayTimestamp } from '../src/utils.js';
+import {commandsAutocomplete} from '../src/prompts.js';
 
 const program = new Command();
 
 // Create a new program
+
+const programCommands = ['update', 'add', 'list']
 
 program
   .version('0.0.1')
@@ -63,6 +66,15 @@ program
       }
     }
   );
+
+program
+  .command('interactive')
+  .action(
+    async () => {
+      await commandsAutocomplete(programCommands);
+    }
+  );
+
 
 
 // Parse the command line arguments
