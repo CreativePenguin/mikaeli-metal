@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 import {Command} from 'commander';
-import {update, add, listCategories, 
-  listCategoryItems } from '../src/utils.js';
+import {update, add, listCategories, log, error,
+  listCategoryItems, displayTimestamp } from '../src/utils.js';
 
 const program = new Command();
 
 // Create a new program
+
 program
   .version('0.0.1')
   .description('Back office for My App')
@@ -50,14 +51,15 @@ program
   .action(
     async (args, opts) => {
       if (args && opts.all) {
-        throw new Error('Cannot specify both "all" and category');
+        error('Cannot specify both "all" and category');
       } else if (opts.all || args === 'all') {
+        displayTimestamp();
         listCategories();
       } else if (args === 'confectionery' || args === 'electronics') {
+        displayTimestamp();
         await listCategoryItems(args);
       } else {
-        throw new Error('Invalid category specified');
-        // console.log('Invalid category specified');
+        error('Invalid category specified');
       }
     }
   );

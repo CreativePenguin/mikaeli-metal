@@ -1,3 +1,5 @@
+import chalk from 'chalk';
+
 const API = 'http://localhost:3000';
 
 export async function update(id, amount) {
@@ -26,7 +28,7 @@ export const log = (msg) => {
 };
 
 export const error = (msg) => {
-  console.error(`\n${msg}\n`);
+  console.error(`${chalk.bgRed('⚠️ Error:')}\n${chalk.red(msg)}\n`);
 };
 
 // add a new product to the website
@@ -53,7 +55,7 @@ export async function add(...args) {
   })
 }
 
-const categories = ['confectionery', 'electronics']
+export const categories = ['confectionery', 'electronics']
 export function listCategories() {
   log('Categories:\n')
   try {
@@ -62,6 +64,12 @@ export function listCategories() {
     error(err.message);
     process.exit(1);
   }
+}
+
+export async function returnCategoryItems(category) {
+  return fetch(`${API}/${category}`)
+    .then( (data) => data.json())
+    .catch((err) => error(err));
 }
 
 export async function listCategoryItems(category) {
@@ -83,3 +91,10 @@ export async function listCategoryItems(category) {
     process.exit(1);
   }
 }
+
+const timestamp = () => new Date().toLocaleString();
+
+export const displayTimestamp = () => chalk.bgMagenta(timestamp());
+export const displayInfo = (msg) => chalk.bgYellow.bold(`ℹ️  ${msg ?? 'Info:'}`);
+export const displaySuccess = (msg='') => 
+  chalk.bgCyan.inverse.bold(`✅ Success! ${msg}`);
